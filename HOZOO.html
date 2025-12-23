@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXECUTE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a001a 50%, #330033 100%);
+            color: #e0d6ff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .execute-container {
+            background: rgba(10, 0, 20, 0.95);
+            border-radius: 20px;
+            border: 3px solid #9D00FF;
+            padding: 50px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 20px 40px rgba(157, 0, 255, 0.5);
+            text-align: center;
+        }
+        
+        .logo-container {
+            margin-bottom: 40px;
+        }
+        
+        .logo-img {
+            height: 180px;
+            width: 180px;
+            border-radius: 20px;
+            border: 4px solid #9D00FF;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(157, 0, 255, 0.6);
+        }
+        
+        .input-group {
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: #c084fc;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 22px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #571B7E;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.4rem;
+            transition: all 0.3s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #9D00FF;
+            box-shadow: 0 0 0 4px rgba(157, 0, 255, 0.4);
+            transform: scale(1.02);
+        }
+        
+        .btn-execute {
+            width: 100%;
+            padding: 25px;
+            background: linear-gradient(to right, #ff0080, #9D00FF);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 900;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .btn-execute:hover {
+            background: linear-gradient(to right, #e60073, #8a00e0);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px rgba(157, 0, 255, 0.6);
+        }
+        
+        .btn-execute:active {
+            transform: translateY(-4px);
+        }
+        
+        .dialog-success {
+            margin-top: 35px;
+            padding: 30px;
+            background: rgba(0, 255, 136, 0.15);
+            border: 3px solid #00ff88;
+            border-radius: 15px;
+            color: #a0ffd0;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .dialog-success.show {
+            display: block;
+        }
+        
+        .dialog-title {
+            color: #00ff88;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .dialog-details {
+            text-align: left;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+        
+        .dialog-details p {
+            margin: 12px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .dialog-details span {
+            color: #ffffff;
+            font-weight: 700;
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-30px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        @keyframes pulse {
+            0% { 
+                box-shadow: 0 0 0 0 rgba(157, 0, 255, 0.8),
+                           0 0 0 0 rgba(255, 0, 128, 0.8); 
+            }
+            70% { 
+                box-shadow: 0 0 0 20px rgba(157, 0, 255, 0),
+                           0 0 0 30px rgba(255, 0, 128, 0); 
+            }
+            100% { 
+                box-shadow: 0 0 0 0 rgba(157, 0, 255, 0),
+                           0 0 0 0 rgba(255, 0, 128, 0); 
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2.5s infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { 
+                border-color: #9D00FF;
+                box-shadow: 0 0 30px rgba(157, 0, 255, 0.6);
+            }
+            50% { 
+                border-color: #ff0080;
+                box-shadow: 0 0 50px rgba(255, 0, 128, 0.8);
+            }
+        }
+        
+        .glow {
+            animation: glow 3s infinite;
+        }
+        
+        .status {
+            margin-top: 25px;
+            font-size: 1rem;
+            color: #aaa;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+        
+        .execute-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(157, 0, 255, 0.2);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            border: 1px solid #9D00FF;
+        }
+    </style>
+</head>
+<body>
+    <div class="execute-container">
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/HOZOOMD/HOZOOBUG/main/IMG_20251123_134648_254.jpg" 
+                 alt="LOGO" 
+                 class="logo-img glow"
+                 onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\"><rect width=\"200\" height=\"200\" fill=\"%231a001a\"/><circle cx=\"100\" cy=\"100\" r=\"80\" fill=\"%239D00FF\" opacity=\"0.3\"/><text x=\"100\" y=\"115\" font-family=\"Arial\" font-size=\"42\" fill=\"white\" text-anchor=\"middle\" font-weight=\"bold\"></text></svg>
+        </div>
+        
+        <div class="input-group">
+            <label for="execNumber" class="input-label">         
+                      [ XEON HOZOO MD]</label>
+            <input type="text" 
+                   id="execNumber" 
+                   class="input-field" 
+                   placeholder="Ketik nomor execute disini..."
+                   autocomplete="off"
+                   autofocus>
+        </div>
+        
+        <button id="executeBtn" class="btn-execute pulse">
+            ⚡ EXECUTE 
+        </button>
+        
+        <div id="successDialog" class="dialog-success">
+            <div class="dialog-title">
+                ✅ SUKSES DIBANNED!
+            </div>
+            <div class="dialog-details">
+                <p><strong>Target:</strong> <span id="targetDisplay">N/A</span></p>
+                <p><strong>Status:</strong> <span style="color:#00ff88; font-weight: bold;">BANNED PERMANEN</span></p>
+                <p><strong>Waktu:</strong> <span id="banTime">-</span></p>
+                <p><strong>Log ID:</strong> BAN-<span id="logId">XXXX</span></p>
+            </div>
+        </div>
+        
+        <div class="status">
+             
+        </div>
+    </div>
+    
+    <div class="execute-counter" id="counter">
+        Executed: <span id="execCount">0</span>
+    </div>
+
+    <script>
+        let executeCount = 0;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const execBtn = document.getElementById('executeBtn');
+            const execInput = document.getElementById('execNumber');
+            const successDialog = document.getElementById('successDialog');
+            const targetDisplay = document.getElementById('targetDisplay');
+            const banTimeDisplay = document.getElementById('banTime');
+            const logIdDisplay = document.getElementById('logId');
+            const execCountDisplay = document.getElementById('execCount');
+            
+            // Format waktu sekarang
+            function getCurrentTime() {
+                const now = new Date();
+                const day = now.getDate().toString().padStart(2, '0');
+                const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                const year = now.getFullYear();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const seconds = now.getSeconds().toString().padStart(2, '0');
+                
+                return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+            }
+            
+            // Generate ID acak 6 digit
+            function generateLogId() {
+                return Math.floor(100000 + Math.random() * 900000);
+            }
+            
+            // Update counter
+            function updateCounter() {
+                executeCount++;
+                execCountDisplay.textContent = executeCount;
+                
+                // Animasi counter
+                execCountDisplay.style.transform = 'scale(1.3)';
+                execCountDisplay.style.color = '#ff0080';
+                setTimeout(() => {
+                    execCountDisplay.style.transform = 'scale(1)';
+                    execCountDisplay.style.color = 'white';
+                }, 300);
+            }
+            
+            // Tombol Execute
+            execBtn.addEventListener('click', function() {
+                const targetId = execInput.value.trim();
+                
+                if (!targetId) {
+                    execInput.placeholder = "MASUKKAN NOMOR DULU!";
+                    execInput.style.borderColor = "#ff0000";
+                    execInput.style.boxShadow = "0 0 0 4px rgba(255, 0, 0, 0.4)";
+                    
+                    setTimeout(() => {
+                        execInput.placeholder = "Ketik nomor execute disini...";
+                        execInput.style.borderColor = "#571B7E";
+                        execInput.style.boxShadow = "none";
+                    }, 2000);
+                    return;
+                }
+                
+                // Update dialog
+                targetDisplay.textContent = targetId;
+                banTimeDisplay.textContent = getCurrentTime();
+                logIdDisplay.textContent = generateLogId();
+                
+                // Update counter
+                updateCounter();
+                
+                // Tampilkan dialog sukses
+                successDialog.classList.add('show');
+                
+                // Reset input
+                execInput.value = '';
+                
+                // Animasi tombol
+                this.classList.remove('pulse');
+                this.innerHTML = '⚡ PROSES SELESAI';
+                this.style.background = 'linear-gradient(to right, #00cc66, #00994d)';
+                
+                setTimeout(() => {
+                    this.innerHTML = '⚡ EXECUTE & BAN';
+                    this.style.background = 'linear-gradient(to right, #ff0080, #9D00FF)';
+                    this.classList.add('pulse');
+                }, 2000);
+                
+                // Auto hide dialog setelah 5 detik
+                setTimeout(() => {
+                    successDialog.classList.remove('show');
+                }, 5000);
+            });
+            
+            // Enter untuk execute
+            execInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    execBtn.click();
+                }
+            });
+            
+            // Fokus otomatis ke input
+            execInput.focus();
+            
+            // Klik logo untuk reset counter (hidden feature)
+            document.querySelector('.logo-img').addEventListener('dblclick', function() {
+                executeCount = 0;
+                execCountDisplay.textContent = '0';
+                this.style.borderColor = '#00ff88';
+                setTimeout(() => {
+                    this.style.borderColor = '#9D00FF';
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+              </html>
